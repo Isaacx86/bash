@@ -1,0 +1,44 @@
+#Bash script for cron scheduling tasks in linux on command line, will define and use user permissions for given job.
+#!/bin/bash
+echo "Please enter schedule for a task to be run, the username, the command options and argument"
+read -p 'Schedule e.g * * * * *  (day of week, month, day of month, hour and minute): ' sched
+read -p 'Task Name: ' task
+read -p 'Username: ' username
+read -p 'Command Options: ' cmdopt
+
+echo "Checking $sched"
+echo "Running $task"
+echo "under user: $username"
+echo "Argument : $cmdopt"
+
+case "$1" in
+        install | update)
+
+        CRON_FILE="/var/spool/cron/root"
+
+        if [! -f $CRON_FILE ]; then
+                echo "cron file for $username does mot exist, creating.."
+                touch $CRON_FILE
+                usr/bin/crontab $CRON_FILE
+        fi
+
+        grep -qi "Cleaning_script" $CRON_FILE
+        if [ $? != 0 ] ; then
+                echo "updating the CRON JOB for cleaning temp files"
+                crontab -u $username -l >/tmpcrontab
+                        bin/echo $sched rm -f /home/$username/cleanup_script.sh" >> /tmp/crontab
+                crontab -u $username /tmp/crontab
+
+        fi
+        ;;
+
+        *)
+        echo "Usage: $0 {install|update}"
+        exit 1
+        ;;
+crontab -l | {cat; echo "$sched $cmdopt";} | crontab -
+cat <(crontab -l) <(echo "$sched $cmdopt") | crontab -
+crontab -u $username -l
+esac
+
+
