@@ -1,0 +1,41 @@
+# Bash script for taking filename as argument, proceeds to read each line and will create username, home directory according to permisions, and use usermod and chmod to define groups 
+#!/bin/bash
+echo -n "Please enter a file name"
+echo $1
+read filename
+
+count=0
+while read line; do
+  echo "$count>>$line";
+  let count++;
+done <$1
+
+
+//location of the txt file of usernames
+userfile=/tmp/userlist 
+
+//extracting usernames from the file one-by-one
+username=$(cat /tmp/userlist | tr 'A-Z'  'a-z')
+
+//defining the default password 
+password=$username@123 // Please define correct password in hash, this is only an example of progress
+
+//running loop  to add users
+for user in $username
+do
+       //adding users '$user' is a variable that changes
+       // usernames accordingly in txt file.
+       useradd $2
+       echo $password | passwd --stdin $user
+done
+
+//echo is used to display the total numbers of 
+//users created, counting the names in the txt 
+//file, tail to display the final details of 
+//the process on both lines(optional)
+echo "$(wc -l /tmp/userlist) users have been created" 
+tail -n$(wc -l /tmp userlist) /etc/passwd
+
+mkdir $3
+
+groupadd -f $4 
