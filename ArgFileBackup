@@ -1,0 +1,38 @@
+# Shell script for backing up files manualy, refer to CRON scheduler to schedule this task.
+#!/bin/bash
+echo "Enter the backup location"
+
+read location
+if [[ -d "$LOCATION" ]]
+then
+       echo "$DIRECTORY exists on your system not creating file"
+echo "Enter the file name"
+
+read filename
+
+cp $filename /home/toor/$location
+echo "File Copy Successful"
+if [[ -f <home/toor/$location/$filename> ]]
+then
+       echo "<$filename> exists on your filesystem."
+fi
+
+read filename
+if [ -f "$filename" ]; then
+                echo "the file exists"
+                break
+        else
+                echo "File does not exist"
+        fi
+done
+
+FILE=$(date +"backup_%d_%m_%s.sh)
+touch /home/toor/$FILE ;;
+read ALLFILES
+for FN in $ALLFILES
+       do echo "Copying"
+       cp $LINE /backup/
+       echo "line count"
+       wc -l $LINE
+   done
+echo "done"
